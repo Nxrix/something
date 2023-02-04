@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title></title>
+</head>
+<style>
+* {
+  margin:none;
+  padding:none;
+}
+#main {
+  width:75vmin;
+  height:75vmin;
+  position: absolute;
+  left: calc(50vw - 37.5vmin);
+}
+#canvas {
+  width:75vmin;
+  height:75vmin;
+  image-rendering:pixelated;
+}
+#btn {
+  width:37.5vmin;
+  height:20vmin;
+}
+</style>
+<body>
+<div id="main">
+<canvas id="canvas" onclick="save(this.toDataURL(),i)"></canvas>
+<button id="btn" onclick="i=Math.max(i-1,0)"><<</button><button id="btn" onclick="i=Math.min(i+1,255)">>></button>
+</div>
+<img src="sprite.png" id="img" hidden>
+</body>
+<script>
+save=(img,name)=>{
+  var a = document.createElement("a");
+  a.href = encodeURI(img);
+  a.target = "_blank";
+  a.download = name + ".png";
+  a.click();
+}
+i=Math.floor(Math.random()*255);
+ctx=canvas.getContext("2d");
+canvas.width=540;
+canvas.height=540;
+img=document.getElementById("img");
+btns=document.getElementsByTagName("button");
+draw=()=>{
+  x=i%16*36;
+  y=Math.floor(i/16)*36;
+  btns[0].innerHTML="<<"+(i-1);
+  btns[1].innerHTML=(i+1)+">>";
+  ctx.imageSmoothingEnabled = false;
+  ctx.drawImage(img,x,y,36,36,0,0,540,540);
+  requestAnimationFrame(draw);
+}
+draw();
+</script>
+</html>
